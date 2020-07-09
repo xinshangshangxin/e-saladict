@@ -1,0 +1,69 @@
+{
+  "name": "e-saladict",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../build/index.js",
+    "buildDarwin": "npm run build && electron-builder --mac --x64",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "electron-is-dev": "^1.2.0",
+    "electron-localshortcut": "^3.2.1",
+    "electron-log": "^4.2.2",
+    "electron-window-state": "^5.0.3",
+    "node-static": "^0.7.11",
+    "rxjs": "^6.6.0"
+  },
+  "devDependencies": {
+    "electron": "^8.3.4",
+    "electron-builder": "^22.7.0",
+    "fs-extra": "^9.0.1"
+  },
+  "build": {
+    "files": [
+      "ext-saladict/build/chrome/**/*",
+      "main/**/*",
+      "node_modules/**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "appId": "com.xinshangshangxin.saladict",
+    "asar": false,
+    "protocols": [
+      {
+        "name": "saladict",
+        "schemes": [
+          "saladict"
+        ]
+      }
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icon.png"
+    }
+  }
+}

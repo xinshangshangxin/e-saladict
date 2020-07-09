@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; width: 100%;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>沙拉查词</title>
+    <style>
+      #saladict-paste {
+        display: none;
+      }
+    </style>
+  </head>
+  <body style="height: 100%; width: 100%; margin: 0;">
+    <script src="./mock/core.js"></script>
+
+    <!-- background-script -->
+
+    <iframe
+      id="iframe"
+      style="height: 100%; width: 100%; margin: 0; padding: 0;"
+      frameborder="0"
+    ></iframe>
+
+    <script>
+      const url = location.href;
+
+      const searchParams = new URLSearchParams(location.search);
+      const isOption = searchParams.get('page') === 'options';
+      let search = searchParams.get('search');
+
+      if (isOption) {
+        document.getElementById('iframe').setAttribute('src', './options.html');
+      } else {
+        document.getElementById('iframe').setAttribute('src', './quick-search.html');
+      }
+
+      function disablePageButton() {
+        if (isOption) {
+          return;
+        }
+
+        const doc = document.querySelector('#iframe').contentWindow.document;
+
+        // 搜索界面跳转配置
+        const list = [...doc.querySelectorAll('.dictPanel-Head button')];
+
+        if (!list || list.length < 3) {
+          return;
+        }
+
+        list[3].addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          location.href = '/?page=options';
+        });
+
+        list.slice(4).forEach((ele) => {
+          ele.style = 'display: none';
+        });
+      }
+
+      function setNativeValue(element, value) {
+        let lastValue = element.value;
+        element.value = value;
+        let event = new Event('input', { target: element, bubbles: true });
+        // React 15
+        event.simulated = true;
+        // React 16
+        let tracker = element._valueTracker;
+        if (tracker) {
+          tracker.setValue(lastValue);
+        }
+        element.dispatchEvent(event);
+      }
+
+      function loadIframeContent() {
+        const doc = document.querySelector('#iframe').contentWindow.document;
+
+        // 配置界面返回搜索界面
+        if (isOption) {
+          const headEle = doc.querySelector('.options-header-title');
+          headEle &&
+            headEle.addEventListener('click', () => {
+              location.href = '/';
+            });
+          return;
+        }
+
+        if (search) {
+          let doc = document.querySelector('#iframe').contentWindow.document;
+          let input = doc.querySelector('.menuBar-SearchBox');
+
+          // 设置 value
+          setNativeValue(input, search);
+
+          // 回车
+          let event = doc.createEvent('Event');
+          event.initEvent('keydown', true, false);
+          event = Object.assign(event, {
+            ctrlKey: false,
+            metaKey: false,
+            altKey: false,
+            which: 13,
+            keyCode: 13,
+            key: 'Enter',
+            code: 'Enter',
+          });
+          input.dispatchEvent(event);
+        }
+      }
+
+      function addSearchListen() {
+        const { ReplaySubject } = require('rxjs');
+        const { startWith, distinctUntilChanged, filter, tap } = require('rxjs/operators');
+        const redirectSubject = new ReplaySubject(1);
+
+        const subscription = require('electron').remote.app.redirectSubject.subscribe((data) => {
+          console.info('redirectSubject data: ', data);
+
+          if (data === '__destroy__') {
+            redirectSubject.complete();
+            subscription?.unsubscribe();
+            return;
+          }
+
+          redirectSubject.next(data);
+        }, console.warn);
+
+        redirectSubject
+          .pipe(
+            startWith(null),
+            distinctUntilChanged(),
+            filter((val) => {
+              return !!val;
+            }),
+            tap((val) => {
+              if (isOption && search) {
+                location.href = '/?search=' + val;
+                return;
+              }
+
+              search = val;
+              try {
+                loadIframeContent();
+              } catch (e) {
+                console.warn(e);
+              }
+            })
+          )
+          .subscribe(console.info, console.warn);
+      }
+
+      document.querySelector('#iframe').addEventListener('load', disablePageButton);
+      document.querySelector('#iframe').addEventListener('load', loadIframeContent);
+
+      addSearchListen();
+    </script>
+  </body>
+</html>

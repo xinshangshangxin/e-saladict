@@ -1,0 +1,108 @@
+name: build and release
+
+on: push
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: build
+        working-directory: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+        run: |
+          git clone https://github.com/crimx/ext-saladict.git
+          git clone https://github.com/crimx/webextensions-emulator.git
+
+          # 构建 saladict
+          cd ext-saladict
+          npm install
+          npm run build
+          cd ..
+
+          # 构建 WebextensionsEmulator
+          npm install
+          node build/index.js WebextensionsEmulator
+
+          # 组合 saladict 和 WebextensionsEmulator
+          cd webextensions-emulator
+          npm install
+          cd ..
+          npm run build
+
+          # electron build
+          npm run buildDarwin
+
+          # set env version
+          filename=$(ls ./dist/*.dmg)
+          pre=${filename#*e-saladict-}
+          version=${pre%.dmg}
+          echo "::set-env name=VERSION::${version}"
+          ls -l ./dist/
+
+      - name: Upload dmg
+        uses: actions/upload-artifact@v1
+        with:
+          name: e-saladict
+          path: ./dist/e-saladict-${{ env.VERSION }}.dmg
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: e-saladict
+
+      - name: set asset_path env
+        run: |
+          ls -lah e-saladict
+          asset_path=$(ls ./e-saladict/*.dmg)
+          asset_name=${asset_path#*e-saladict/}
+          echo "::set-env name=ASSET_PATH::${asset_path}"
+          echo "::set-env name=ASSET_NAME::${asset_name}"
+
+      - name: Upload Mac Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ASSET_PATH }}
+          asset_name: ${{ env.ASSET_NAME }}
+          asset_content_type: application/octet-stream
