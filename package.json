@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "build": "cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../build/index.js",
-    "buildDarwin": "npm run build && electron-builder --mac --x64",
+    "buildDarwin": "electron-builder --mac",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -57,13 +57,13 @@
       "target": [
         "dmg"
       ],
-      "icon": "assets/icon.png"
+      "icon": "main/assets/icon.png"
     },
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "assets/icon.png"
+      "icon": "main/assets/icon.png"
     }
   }
 }

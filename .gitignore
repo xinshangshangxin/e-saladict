@@ -1,4 +1,5 @@
-/ext-saladict
-/node_modules
-/webextensions-emulator
+ext-saladict
+node_modules
+webextensions-emulator
+dist
 .DS_Store
