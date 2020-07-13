@@ -4,7 +4,6 @@ const { defer } = require('../util/defer');
 const { getUnUsedPort } = require('../util/port-detect');
 const { staticServer } = require('../env');
 const { createStaticServer } = require('../util/static-server');
-const { resolve: pathResolve } = require('path');
 
 const QuitAppStatus = {
   // 阻止本次退出
@@ -24,6 +23,10 @@ class Instance {
 
   portDeferred = defer();
 
+  server = null;
+
+  tray = null;
+
   constructor() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
@@ -31,13 +34,14 @@ class Instance {
 
     // 端口获取
     getUnUsedPort()
-      .then((port) => {
+      .then(async (port) => {
         staticServer.port = port;
         staticServer.url = 'http://127.0.0.1:' + port;
 
-        createStaticServer(staticServer.staticFile, port);
-
         console.info('staticServer: ', staticServer);
+        
+        this.server = await createStaticServer(staticServer.staticFile, port);
+
         return this.portDeferred.resolve(port);
       })
       .catch(this.portDeferred.reject);

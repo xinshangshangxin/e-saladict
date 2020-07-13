@@ -2,14 +2,14 @@ const { app, clipboard } = require('electron');
 const { isDev } = require('../env');
 const { showWindow } = require('./show-window');
 const { instance } = require('./instance');
-const { lockInstance } = require('./lock');
-
-lockInstance();
 
 function showSearchWindow(url = '') {
+  console.log('showSearchWindow url: ', url);
+
   const text = url.replace('saladict://', '') || clipboard.readText('clipboard');
   instance.redirectSubject.next(text);
-  console.log('text: ', text);
+
+  console.log('search text: ', text);
   showWindow();
 }
 
@@ -21,20 +21,18 @@ function registerProtocol(protocol = 'saladict') {
 
   // mac 下监听唤起
   app.on('open-url', (event, url) => {
-    console.log('open-url: ', url);
-
     event.preventDefault();
-    showSearchWindow();
+    showSearchWindow(url);
   });
 
   // windows 下监听唤起
   app.on('second-instance', (e, argv) => {
     if (process.platform == 'win32') {
       const url = argv.slice(1).pop();
-      console.info('second-instance url: ', url);
+      showSearchWindow(url);
+    } else {
+      showSearchWindow();
     }
-
-    showSearchWindow();
   });
 }
 

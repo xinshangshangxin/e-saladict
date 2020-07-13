@@ -25,13 +25,25 @@
       const url = location.href;
 
       const searchParams = new URLSearchParams(location.search);
-      const isOption = searchParams.get('page') === 'options';
+      let isOption = searchParams.get('page') === 'options';
       let search = searchParams.get('search');
 
+      function redirectPage(page = 'quick-search') {
+        if (page === 'quick-search') {
+          isOption = false;
+          document.querySelector('#iframe').setAttribute('src', './quick-search.html');
+        } else {
+          isOption = true;
+          search = '';
+          document.querySelector('#iframe').setAttribute('src', './options.html');
+        }
+      }
+
+      // 载入界面
       if (isOption) {
-        document.getElementById('iframe').setAttribute('src', './options.html');
+        redirectPage('options');
       } else {
-        document.getElementById('iframe').setAttribute('src', './quick-search.html');
+        redirectPage();
       }
 
       function disablePageButton() {
@@ -48,13 +60,15 @@
           return;
         }
 
+        // 跳转配置界面
         list[3].addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
 
-          location.href = '/?page=options';
+          redirectPage('options');
         });
 
+        // 剩下的按钮全部影响
         list.slice(4).forEach((ele) => {
           ele.style = 'display: none';
         });
@@ -79,11 +93,18 @@
 
         // 配置界面返回搜索界面
         if (isOption) {
-          const headEle = doc.querySelector('.options-header-title');
-          headEle &&
+          setTimeout(() => {
+            const headEle = doc.querySelector('.options-header-title');
+            if (!headEle) {
+              return;
+            }
+
+            headEle.style = 'cursor: pointer';
+
             headEle.addEventListener('click', () => {
-              location.href = '/';
+              redirectPage();
             });
+          }, 500);
           return;
         }
 
@@ -129,18 +150,23 @@
 
         redirectSubject
           .pipe(
-            startWith(null),
-            distinctUntilChanged(),
+            filter((val) => {
+              return val !== search;
+            }),
             filter((val) => {
               return !!val;
             }),
             tap((val) => {
-              if (isOption && search) {
-                location.href = '/?search=' + val;
+              console.info('val: ', val);
+              search = val;
+
+              // 当前在设置界面, 跳转搜索界面
+              if (isOption) {
+                redirectPage();
                 return;
               }
 
-              search = val;
+              // 当前在搜索界面, 重新搜索
               try {
                 loadIframeContent();
               } catch (e) {
