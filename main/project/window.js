@@ -4,8 +4,8 @@ const { isDev, staticServer } = require('../env');
 
 function createWindow(isShow = false) {
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 800,
-    defaultHeight: 600,
+    defaultWidth: 350,
+    defaultHeight: 550,
   });
 
   const win = new BrowserWindow({
@@ -19,7 +19,6 @@ function createWindow(isShow = false) {
       webSecurity: false,
     },
     show: isShow,
-    // titleBarStyle: 'hidden',
   });
 
   mainWindowState.manage(win);

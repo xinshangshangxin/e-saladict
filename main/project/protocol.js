@@ -1,19 +1,19 @@
 const { app, clipboard } = require('electron');
-const { isDev } = require('../env');
+const { isDev, defaultProtocol } = require('../env');
 const { showWindow } = require('./show-window');
 const { instance } = require('./instance');
 
 function showSearchWindow(url = '') {
   console.log('showSearchWindow url: ', url);
 
-  const text = url.replace('saladict://', '') || clipboard.readText('clipboard');
+  const text = url.replace(`${defaultProtocol}://`, '') || clipboard.readText('clipboard');
   instance.redirectSubject.next(text);
 
   console.log('search text: ', text);
   showWindow();
 }
 
-function registerProtocol(protocol = 'saladict') {
+function registerProtocol(protocol = defaultProtocol) {
   // 不是开发环境, 并且未注册 protocol
   if (!isDev && !app.isDefaultProtocolClient(protocol)) {
     app.setAsDefaultProtocolClient(protocol);

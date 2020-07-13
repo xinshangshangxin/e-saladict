@@ -29,7 +29,6 @@ class Instance {
 
   constructor() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
     app.redirectSubject = this.redirectSubject;
 
     // 端口获取

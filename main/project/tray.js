@@ -24,7 +24,6 @@ const menuTemplate = [
 const menu = Menu.buildFromTemplate(menuTemplate);
 
 function addTray() {
-  console.info('addTray');
   const tray = new Tray(pathResolve(__dirname, '../assets/tray.png'));
 
   tray.on('click', () => {

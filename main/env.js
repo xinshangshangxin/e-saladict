@@ -7,4 +7,6 @@ const staticServer = {
   staticFile: pathResolve(__dirname, '../ext-saladict/build/chrome/'),
 };
 
-module.exports = { isDev, staticServer };
+const defaultProtocol = isDev ? 'saladict-dev' : 'saladict';
+
+module.exports = { isDev, staticServer, defaultProtocol };
