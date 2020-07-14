@@ -141,7 +141,7 @@
 
           if (data === '__destroy__') {
             redirectSubject.complete();
-            subscription?.unsubscribe();
+            subscription && subscription.unsubscribe();
             return;
           }
 

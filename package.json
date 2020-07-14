@@ -1,17 +1,24 @@
 {
   "name": "e-saladict",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "沙拉词典桌面版",
   "main": "./main/index.js",
   "scripts": {
     "start": "electron .",
-    "build": "node build/index.js WebextensionsEmulator && cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../build/index.js",
+    "build": "npm run buildOrigin && npm run buildReplacer",
+    "buildOrigin": "cd ext-saladict && npm run build && cd ..",
+    "buildReplacer": "node build/index.js WebextensionsEmulator && cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../build/index.js",
     "buildDarwin": "electron-builder --mac",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "saladict",
+    "desktop",
+    "mac",
+    "macos"
+  ],
+  "author": "xinshangshangxin",
+  "license": "MIX",
   "dependencies": {
     "bluebird": "^3.7.2",
     "electron-is-dev": "^1.2.0",
@@ -22,7 +29,7 @@
     "rxjs": "^6.6.0"
   },
   "devDependencies": {
-    "electron": "^8.3.4",
+    "electron": "^8.4.0",
     "electron-builder": "^22.7.0",
     "fs-extra": "^9.0.1"
   },

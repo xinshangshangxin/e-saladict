@@ -10,7 +10,7 @@ function close() {
 
   // destroy close win
   setTimeout(() => {
-    win?.destroy();
+    win && win.destroy();
   }, 0);
 }
 
