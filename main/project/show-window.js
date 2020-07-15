@@ -19,7 +19,7 @@ function showWindow() {
 
     register(win);
 
-    // app.dock.show();
+    app.dock.show();
   } else if (win.isMinimized()) {
     win.restore();
   } else {
