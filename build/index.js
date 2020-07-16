@@ -43,6 +43,10 @@ async function addContentScript() {
   });
 
   await Promise.all(ps);
+  await copy(
+    pathResolve(__dirname, 'global-shortcut.html'),
+    pathResolve(distDir, 'global-shortcut.html')
+  );
 }
 
 async function replaceWebextensionsEmulator() {

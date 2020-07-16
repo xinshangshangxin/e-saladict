@@ -1,5 +1,12 @@
+const { app } = require('electron');
 const isDev = require('electron-is-dev');
 const { resolve: pathResolve } = require('path');
+
+let userData = app.getPath('userData');
+
+if (isDev) {
+  userData = pathResolve(__dirname, '../.tmp');
+}
 
 const staticServer = {
   port: 10000,
@@ -9,4 +16,4 @@ const staticServer = {
 
 const defaultProtocol = isDev ? 'saladict-dev' : 'saladict';
 
-module.exports = { isDev, staticServer, defaultProtocol };
+module.exports = { isDev, staticServer, defaultProtocol, userData };

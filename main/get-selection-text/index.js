@@ -5,6 +5,7 @@ const BB = require('bluebird');
 const scriptPath = pathResolve(__dirname, './copy.scpt');
 
 async function getSelectionText(timeout = 3000) {
+  console.debug(`osascript ${scriptPath}`);
   const child = spawn(`osascript ${scriptPath}`, {
     shell: true,
   });

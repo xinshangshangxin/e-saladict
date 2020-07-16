@@ -91,10 +91,12 @@
       function loadIframeContent() {
         const doc = document.querySelector('#iframe').contentWindow.document;
 
+        console.info('isOption: ', isOption);
         // 配置界面返回搜索界面
         if (isOption) {
           setTimeout(() => {
             const headEle = doc.querySelector('.options-header-title');
+            console.info('headEle: ', headEle)
             if (!headEle) {
               return;
             }
@@ -103,6 +105,17 @@
 
             headEle.addEventListener('click', () => {
               redirectPage();
+            });
+
+            const bubbleEle = doc.querySelector('.head-info-bubble-wrap');
+            console.info('bubbleEle: ', bubbleEle)
+            if (!bubbleEle) {
+              return;
+            }
+
+            bubbleEle.style = 'cursor: pointer';
+            bubbleEle.addEventListener('click', () => {
+              location.href = './global-shortcut.html';
             });
           }, 500);
           return;

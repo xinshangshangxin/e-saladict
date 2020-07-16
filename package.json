@@ -20,11 +20,13 @@
   "author": "xinshangshangxin",
   "license": "MIX",
   "dependencies": {
+    "@s4p/sdb": "^0.5.0",
     "bluebird": "^3.7.2",
     "electron-is-dev": "^1.2.0",
     "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.2.2",
     "electron-window-state": "^5.0.3",
+    "nedb": "^1.8.0",
     "node-static": "^0.7.11",
     "rxjs": "^6.6.0"
   },

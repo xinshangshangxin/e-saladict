@@ -3,3 +3,4 @@ node_modules
 webextensions-emulator
 dist
 .DS_Store
+/.tmp

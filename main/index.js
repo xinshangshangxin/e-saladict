@@ -7,12 +7,16 @@ const { registerProtocol } = require('./project/protocol');
 const { lockInstance } = require('./project/lock');
 const { addTray } = require('./project/tray');
 const { blockQuit } = require('./project/block-quit');
+const { initShortcut } = require('./project/global-shortcut');
+
+require('./project/router');
 
 lockInstance();
 
 async function ready() {
   addTray();
   registerProtocol();
+  initShortcut();
 
   await instance.portDeferred.promise;
 
