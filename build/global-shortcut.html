@@ -8,9 +8,13 @@
   <body>
     <div id="show"></div>
     <button id="save">确定</button>
-    <a href="./index.html">返回</a>
+    <button id="redirect">返回</button>
 
     <script>
+      function require(key) {
+        return window[key] || window.parent[key];
+      }
+
       const { ipcRenderer } = require('electron');
       const { of, merge, fromEvent, Observable, combineLatest } = require('rxjs');
       const { filter, tap, map, switchMap, share, delay, catchError } = require('rxjs/operators');
@@ -116,6 +120,10 @@
 
       document.querySelector('#save').addEventListener('click', async () => {
         await requestMain('register-shortcut', document.querySelector('#show').innerText);
+      });
+
+      document.querySelector('#redirect').addEventListener('click', () => {
+        window.parent.redirectPage();
       });
 
       requestMain('shortcut')

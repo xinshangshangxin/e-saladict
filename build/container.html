@@ -22,32 +22,43 @@
     ></iframe>
 
     <script>
+      function require(key) {
+        return window[key];
+      }
+
+      const electron = require('electron');
+      const { ReplaySubject } = require('rxjs');
+      const { startWith, distinctUntilChanged, filter, tap } = require('rxjs/operators');
+      const redirectSubject = new ReplaySubject(1);
+
       const url = location.href;
 
       const searchParams = new URLSearchParams(location.search);
-      let isOption = searchParams.get('page') === 'options';
+      let currentPage = searchParams.get('page') || 'quick-search';
+
       let search = searchParams.get('search');
 
       function redirectPage(page = 'quick-search') {
         if (page === 'quick-search') {
-          isOption = false;
+          currentPage = page;
           document.querySelector('#iframe').setAttribute('src', './quick-search.html');
+        } else if (page === 'global-shortcut') {
+          currentPage = page;
+          search = '';
+          document.querySelector('#iframe').setAttribute('src', './global-shortcut.html');
         } else {
-          isOption = true;
+          currentPage = 'options';
           search = '';
           document.querySelector('#iframe').setAttribute('src', './options.html');
         }
       }
 
+      window.redirectPage = redirectPage;
       // 载入界面
-      if (isOption) {
-        redirectPage('options');
-      } else {
-        redirectPage();
-      }
+      redirectPage(currentPage);
 
       function disablePageButton() {
-        if (isOption) {
+        if (currentPage !== 'quick-search') {
           return;
         }
 
@@ -91,12 +102,12 @@
       function loadIframeContent() {
         const doc = document.querySelector('#iframe').contentWindow.document;
 
-        console.info('isOption: ', isOption);
+        console.info('currentPage: ', currentPage);
         // 配置界面返回搜索界面
-        if (isOption) {
+        if (currentPage === 'options') {
           setTimeout(() => {
             const headEle = doc.querySelector('.options-header-title');
-            console.info('headEle: ', headEle)
+            console.info('headEle: ', headEle);
             if (!headEle) {
               return;
             }
@@ -108,20 +119,29 @@
             });
 
             const bubbleEle = doc.querySelector('.head-info-bubble-wrap');
-            console.info('bubbleEle: ', bubbleEle)
+            console.info('bubbleEle: ', bubbleEle);
             if (!bubbleEle) {
               return;
             }
 
+            bubbleEle.innerHTML = '快捷键';
             bubbleEle.style = 'cursor: pointer';
             bubbleEle.addEventListener('click', () => {
-              location.href = './global-shortcut.html';
+              // location.href = './global-shortcut.html';
+              redirectPage('global-shortcut');
+            });
+
+            const ulEle = doc.querySelector('ul.head-info');
+            const liList = ulEle.querySelectorAll('li');
+
+            [...liList].slice(1).map((v) => {
+              ulEle.removeChild(v);
             });
           }, 500);
           return;
         }
 
-        if (search) {
+        if (currentPage === 'quick-search' && search) {
           let doc = document.querySelector('#iframe').contentWindow.document;
           let input = doc.querySelector('.menuBar-SearchBox');
 
@@ -145,11 +165,7 @@
       }
 
       function addSearchListen() {
-        const { ReplaySubject } = require('rxjs');
-        const { startWith, distinctUntilChanged, filter, tap } = require('rxjs/operators');
-        const redirectSubject = new ReplaySubject(1);
-
-        const subscription = require('electron').remote.app.redirectSubject.subscribe((data) => {
+        const subscription = electron.remote.app.redirectSubject.subscribe((data) => {
           console.info('redirectSubject data: ', data);
 
           if (data === '__destroy__') {
@@ -174,8 +190,8 @@
               search = val;
 
               // 当前在设置界面, 跳转搜索界面
-              if (isOption) {
-                redirectPage();
+              if (currentPage !== 'quick-search') {
+                redirectPage('quick-search');
                 return;
               }
 

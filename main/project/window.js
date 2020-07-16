@@ -1,5 +1,7 @@
 const { BrowserWindow } = require('electron');
 const windowStateKeeper = require('electron-window-state');
+const { resolve: pathResolve } = require('path');
+
 const { isDev, staticServer } = require('../env');
 
 function createWindow(isShow = false) {
@@ -14,8 +16,9 @@ function createWindow(isShow = false) {
     width: mainWindowState.width,
     height: mainWindowState.height,
     webPreferences: {
-      nodeIntegration: true,
-      allowRunningInsecureContent: true,
+      nodeIntegration: false,
+      preload: pathResolve(__dirname, '../preload.js'),
+      // allowRunningInsecureContent: true,
       webSecurity: false,
     },
     show: isShow,
