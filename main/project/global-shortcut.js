@@ -1,5 +1,5 @@
 const { globalShortcut } = require('electron');
-const { getSelectionText } = require('../get-selection-text');
+const { getSelectionText } = require('../selection');
 const { instance } = require('./instance');
 const { showWindow } = require('./show-window');
 const { configModel } = require('./storage');

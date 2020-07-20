@@ -27,8 +27,8 @@ async function addContentScript() {
 
   const ps = names.map(async (name) => {
     const origin = pathResolve(distDir, `origin-${name}.html`);
-    const isEists = await pathExists(origin);
-    if (!isEists) {
+    const isExists = await pathExists(origin);
+    if (!isExists) {
       await move(pathResolve(distDir, `${name}.html`), origin);
     }
 

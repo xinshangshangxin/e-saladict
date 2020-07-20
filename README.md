@@ -21,7 +21,7 @@ cd ..
 # clone WebextensionsEmulator 源码
 git clone https://github.com/crimx/webextensions-emulator.git
 # 替换 WebextensionsEmulator 以适配 ext-saladict
-node build/index.js WebextensionsEmulator
+node pre-build/index.js WebextensionsEmulator
 # 构建 WebextensionsEmulator
 cd webextensions-emulator
 npm install
@@ -30,10 +30,10 @@ cd ..
 
 
 # 组合 saladict 和 WebextensionsEmulator
-rm -rf ext-saladict/build/chrome/mock
-mkdir -p ext-saladict/build/chrome/mock
-cp webextensions-emulator/dist/** ext-saladict/build/chrome/mock
-node build/index.js
+rm -rf ext-saladict/pre-build/chrome/mock
+mkdir -p ext-saladict/pre-build/chrome/mock
+cp webextensions-emulator/dist/** ext-saladict/pre-build/chrome/mock
+node pre-build/index.js
 
 # 启动本地 electron
 npm start

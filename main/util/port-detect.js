@@ -26,8 +26,9 @@ async function getUnUsedPort(from = 10000, to = 10020) {
     arr.push(i);
   }
 
+  let step = 1;
   while (arr.length > 0) {
-    let cache = arr.splice(0, 5);
+    let cache = arr.splice(0, step);
 
     const port = await Promise.race(
       cache.map((port) => {
@@ -40,6 +41,8 @@ async function getUnUsedPort(from = 10000, to = 10020) {
     if (port) {
       return port;
     }
+
+    step += 1;
   }
 }
 

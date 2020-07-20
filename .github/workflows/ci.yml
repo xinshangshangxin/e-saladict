@@ -34,20 +34,21 @@ jobs:
         run: |
           # 安装依赖
           npm install
+          npm run rebuild
 
           # 构建 ext-saladict
           git clone https://github.com/crimx/ext-saladict.git
           cd ext-saladict
-          npm install
+          yarn install
           npm run build
           cd ..
 
           # 构建 WebextensionsEmulator
           git clone https://github.com/crimx/webextensions-emulator.git
           # 替换 WebextensionsEmulator 以适配 ext-saladict
-          node build/index.js WebextensionsEmulator
+          node pre-build/index.js WebextensionsEmulator
           cd webextensions-emulator
-          npm install
+          yarn install
           npm run build
           cd ..
 
@@ -55,10 +56,10 @@ jobs:
           rm -rf ext-saladict/build/chrome/mock
           mkdir -p ext-saladict/build/chrome/mock
           cp webextensions-emulator/dist/** ext-saladict/build/chrome/mock
-          node build/index.js
+          node pre-build/index.js
 
           # electron build
-          npm run buildDarwin
+          npm run dist:mac
 
           # set env version
           filename=$(ls ./dist/*.dmg)

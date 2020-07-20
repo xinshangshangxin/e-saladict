@@ -5,10 +5,11 @@
   "main": "./main/index.js",
   "scripts": {
     "start": "electron .",
+    "rebuild": "npm rebuild --runtime=electron --target=$(electron -v) --disturl=https://atom.io/download/atom-shell --abi=$(electron -a)",
     "build": "npm run buildOrigin && npm run buildReplacer",
     "buildOrigin": "cd ext-saladict && npm run build && cd ..",
-    "buildReplacer": "node build/index.js WebextensionsEmulator && cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../build/index.js",
-    "buildDarwin": "electron-builder --mac",
+    "buildReplacer": "node pre-build/index.js WebextensionsEmulator && cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/pre-build/chrome/mock && mkdir -p ../ext-saladict/pre-build/chrome/mock && cp dist/** ../ext-saladict/pre-build/chrome/mock && node ../pre-build/index.js",
+    "dist:mac": "electron-builder --mac",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -22,12 +23,14 @@
   "dependencies": {
     "@s4p/sdb": "^0.5.0",
     "bluebird": "^3.7.2",
+    "cross-spawn": "^7.0.3",
     "electron-is-dev": "^1.2.0",
     "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.2.2",
     "electron-window-state": "^5.0.3",
     "nedb": "^1.8.0",
     "node-static": "^0.7.11",
+    "robotjs": "^0.6.0",
     "rxjs": "^6.6.0"
   },
   "devDependencies": {
@@ -37,7 +40,7 @@
   },
   "build": {
     "files": [
-      "ext-saladict/build/chrome/**/*",
+      "ext-saladict/pre-build/chrome/**/*",
       "main/**/*",
       "node_modules/**/*",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
