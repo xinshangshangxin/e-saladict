@@ -2,6 +2,44 @@
 
 一个使用 `electron` 打包的 [沙拉词典](https://github.com/crimx/ext-saladict)
 
+## [下载地址](https://github.com/xinshangshangxin/e-saladict/releases)
+
+[![release](https://img.shields.io/github/v/release/xinshangshangxin/e-saladict)](https://github.com/xinshangshangxin/e-saladict/releases)
+
+## 界面
+
+![assets](./assets/5.png)
+![assets](./assets/4.png)  
+
+## Q&A
+
+- 快捷键查词
+
+  > 选中单词或句子, 按`Alt+Control+L`
+
+- 快捷键查词只打开了词典, 但是没有查询选中单词(即复制选中内容失败)
+
+  > 打开系统设置 -> 安全 -> 辅助功能 -> 勾选 `e-saladict`([如果已经勾选, 先取消再勾选](https://github.com/octalmage/robotjs/issues/535))
+  > ![assets](./assets/2.png)  
+  > ![assets](./assets/1.png)
+
+- 原理
+
+  > 参考了[issues/827](https://github.com/crimx/ext-saladict/issues/827), 使用了[webextensions-emulator](https://github.com/crimx/webextensions-emulator)模拟 chrome extension 环境, electron 开启 `webSecurity: false` 允许跨域访问
+
+- 配合 alfred 快捷键查词
+
+  > 下载 [Workflow](./assets/e-saladict.alfredworkflow), 双击后导入, 打开 `Workflow` 设置快捷键
+  > ![assets](./assets/3.png)
+
+- 出现卡顿
+
+  > 目前未定位到原因, 怀疑是开启了 `辅助功能` 导致的, 待后续调查
+
+- 没有 Windows 版本, 只有 Mac 版本吗?
+
+  > 当前代码理论上可以构建, 但由于没有测试环境, 无法确认, 欢迎 PR
+
 ## 本地开发
 
 ```bash
@@ -41,6 +79,6 @@ npm start
 
 ## Thanks
 
-[沙拉词典](https://github.com/crimx/ext-saladict)
-[不安装浏览器也可以使用沙拉查词](https://github.com/crimx/ext-saladict/issues/827)
+[沙拉词典](https://github.com/crimx/ext-saladict)  
+[不安装浏览器也可以使用沙拉查词](https://github.com/crimx/ext-saladict/issues/827)  
 [webextensions-emulator](https://github.com/crimx/webextensions-emulator)
