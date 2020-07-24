@@ -11,7 +11,7 @@ if (isDev) {
 const staticServer = {
   port: 10000,
   url: 'http://localhost/10000',
-  staticFile: pathResolve(__dirname, '../ext-saladict/pre-build/chrome/'),
+  staticFile: pathResolve(__dirname, '../ext-saladict/build/chrome/'),
 };
 
 const defaultProtocol = isDev ? 'saladict-dev' : 'saladict';

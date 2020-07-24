@@ -68,9 +68,9 @@ cd ..
 
 
 # 组合 saladict 和 WebextensionsEmulator
-rm -rf ext-saladict/pre-build/chrome/mock
-mkdir -p ext-saladict/pre-build/chrome/mock
-cp webextensions-emulator/dist/** ext-saladict/pre-build/chrome/mock
+rm -rf ext-saladict/build/chrome/mock
+mkdir -p ext-saladict/build/chrome/mock
+cp webextensions-emulator/dist/** ext-saladict/build/chrome/mock
 node pre-build/index.js
 
 # 启动本地 electron
