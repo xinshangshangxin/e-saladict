@@ -1,16 +1,11 @@
 const { globalShortcut } = require('electron');
 const { getSelectionText } = require('../selection');
-const { instance } = require('./instance');
-const { showWindow } = require('./show-window');
 const { configModel } = require('./storage');
+const { search } = require('./search');
 
 async function copyAndSearch() {
   const text = await getSelectionText();
-  console.debug('text: ', text);
-
-  instance.redirectSubject.next(text);
-
-  showWindow();
+  return search(text);
 }
 
 async function getShortcut() {

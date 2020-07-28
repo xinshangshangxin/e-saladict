@@ -1,16 +1,13 @@
 const { app, clipboard } = require('electron');
+
 const { isDev, defaultProtocol } = require('../env');
-const { showWindow } = require('./show-window');
-const { instance } = require('./instance');
+const { search } = require('./search');
 
 function showSearchWindow(url = '') {
   console.log('showSearchWindow url: ', url);
-
   const text = url.replace(`${defaultProtocol}://`, '') || clipboard.readText('clipboard');
-  instance.redirectSubject.next(text);
 
-  console.log('search text: ', text);
-  showWindow();
+  search(text);
 }
 
 function registerProtocol(protocol = defaultProtocol) {

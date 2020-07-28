@@ -28,6 +28,7 @@
     "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.2.2",
     "electron-window-state": "^5.0.3",
+    "humps": "^2.0.1",
     "nedb": "^1.8.0",
     "node-static": "^0.7.11",
     "robotjs": "^0.6.0",
