@@ -1,5 +1,7 @@
 const { Tray, Menu, BrowserWindow } = require('electron');
 const { resolve: pathResolve } = require('path');
+
+const { openSystemPreferences } = require('../util/open-system-preferences');
 const { showWindow } = require('./show-window');
 const { quit } = require('./quit');
 const { instance } = require('./instance');
@@ -10,6 +12,13 @@ const menuTemplate = [
     type: 'normal',
     click: () => {
       showWindow();
+    },
+  },
+  {
+    label: '打开 权限设置',
+    type: 'normal',
+    click: () => {
+      openSystemPreferences('security', 'Privacy_Accessibility');
     },
   },
   {
