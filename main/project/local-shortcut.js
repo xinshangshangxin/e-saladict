@@ -1,11 +1,11 @@
 const localShortcut = require('electron-localshortcut');
 
 const { quit } = require('./quit');
-const { instance, QuitAppStatus, CloseWindowStatus } = require('./instance');
+const { instance, CloseWindowStatus } = require('./instance');
 
 function register(win) {
   localShortcut.register(win, 'Cmd+Q', () => {
-    instance.quitAppStatus = QuitAppStatus.block;
+    instance.win.close();
     quit();
   });
 
