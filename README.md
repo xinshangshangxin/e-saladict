@@ -9,7 +9,7 @@
 ## 界面
 
 ![assets](./assets/5.png)
-![assets](./assets/4.png)  
+![assets](./assets/4.png)
 
 ## Q&A
 
@@ -17,10 +17,13 @@
 
   > 选中单词或句子, 按`Alt+Control+L`
 
-- 快捷键查词只打开了词典, 但是没有查询选中单词(即复制选中内容失败)
+- 快捷键查词只打开了词典, 但是没有查询选中单词(即复制选中内容失败)(_每次安装都会出现_)
 
-  > 打开系统设置 -> 安全 -> 辅助功能 -> 勾选 `e-saladict`([如果已经勾选, 先取消再勾选](https://github.com/octalmage/robotjs/issues/535))
+  > 从菜单中 打开权限设置  
+  > ![assets](./assets/6.png)  
+  > 或者 打开系统设置 -> 安全 -> 辅助功能
   > ![assets](./assets/2.png)  
+  > 勾选 `e-saladict`([如果已经勾选, 先取消再勾选, 如果找不到, 请手动添加](https://github.com/octalmage/robotjs/issues/535))
   > ![assets](./assets/1.png)
 
 - 原理
@@ -34,7 +37,8 @@
 
 - 出现卡顿
 
-  > 目前未定位到原因, 怀疑是开启了 `辅助功能` 导致的, 待后续调查
+  > 开启了 `辅助功能` 导致的, 待后续调查  
+  > 如果 配合 alfred 快捷键查词, 可以在`辅助功能`中关闭权限避免卡顿
 
 - 没有 Windows 版本, 只有 Mac 版本吗?
 
