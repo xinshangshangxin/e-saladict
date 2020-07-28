@@ -25,6 +25,14 @@ async function blockQuit(e) {
       });
     }
 
+    if (instance.win) {
+      instance.win.close();
+
+      setTimeout(() => {
+        app.quit();
+      }, 0);
+    }
+
     // 标注为可以退出
     instance.quitAppStatus = QuitAppStatus.allow;
 
