@@ -14,8 +14,20 @@ const QuitAppStatus = {
   allow: 'allow',
 };
 
+const CloseWindowStatus = {
+  // 阻止本次退出
+  block: 'block',
+  // 延迟退出
+  delay: 'delay',
+  // 允许
+  allow: 'allow',
+};
+
+
 class Instance {
   quitAppStatus = QuitAppStatus.delay;
+
+  closeWindowStatus = QuitAppStatus.delay;
 
   redirectSubject = new ReplaySubject(1);
 
@@ -49,4 +61,4 @@ class Instance {
 
 const instance = new Instance();
 
-module.exports = { instance, QuitAppStatus };
+module.exports = { instance, QuitAppStatus, CloseWindowStatus };

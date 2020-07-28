@@ -1,6 +1,6 @@
 const { app } = require('electron');
 
-const { close } = require('./close');
+const { blockClose } = require('./block-close');
 const { instance } = require('./instance');
 const { register } = require('./local-shortcut');
 const { createWindow } = require('./window');
@@ -15,7 +15,7 @@ function showWindow() {
 
     // 绑定事件
     win.on('show', showWindow);
-    win.on('close', close);
+    win.on('close', blockClose);
 
     register(win);
 
