@@ -47,6 +47,7 @@
 git clone https://github.com/xinshangshangxin/e-saladict.git
 # 安装本项目依赖
 npm install
+npm run rebuild
 
 # clone 沙拉词典源码
 git clone https://github.com/crimx/ext-saladict.git
