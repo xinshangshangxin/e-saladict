@@ -1,3 +1,4 @@
+const { app } = require('electron');
 const localShortcut = require('electron-localshortcut');
 
 const { quit } = require('./quit');
@@ -16,6 +17,7 @@ function register(win) {
 
     setTimeout(() => {
       win.hide();
+      app.dock.hide();
     }, 0);
   });
 }

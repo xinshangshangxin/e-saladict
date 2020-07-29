@@ -18,12 +18,14 @@ function showWindow() {
     win.on('close', blockClose);
 
     register(win);
-
-    app.dock.show();
   } else if (win.isMinimized()) {
     win.restore();
   } else {
     win.show();
+  }
+
+  if (!app.dock.isVisible()) {
+    app.dock.show();
   }
 
   win.focus();
