@@ -1,6 +1,6 @@
 {
   "name": "e-saladict",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "沙拉词典桌面版",
   "main": "./main/index.js",
   "scripts": {
