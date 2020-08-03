@@ -3,20 +3,27 @@ const humps = require('humps');
 const { instance } = require('./instance');
 const { showWindow } = require('./show-window');
 
+function splitWord(word) {
+  // 全是大写, 什么也不做
+  if (/^[A-Z\-]+$/.test(word)) {
+    return word;
+  }
+
+  // 有分隔符, 分割
+  if (/-|_/.test(text)) {
+    return text.split(/-|_/).join(' ');
+  }
+
+  // 转换为小写空格分割
+  return humps.decamelize(text, { separator: ' ' });
+}
+
 function search(text) {
   text = text.trim();
 
   // 只是一个单词, 尝试转换
-  if (!/\s+/.test(text)) {
-    if (/^[A-Z\-]+$/.test(text)) {
-      // 全是大写, 什么也不做
-    } else if (/-|_/.test(text)) {
-      // 有分隔符, 分割
-      text = text.split(/-|_/).join(' ');
-    } else {
-      // 转换为小写空格分割
-      text = humps.decamelize(text, { separator: ' ' });
-    }
+  if (!/\s/.test(text)) {
+    text = splitWord(text);
   }
 
   console.log('search text: ', text);
