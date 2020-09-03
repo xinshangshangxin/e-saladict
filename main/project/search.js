@@ -10,12 +10,12 @@ function splitWord(word) {
   }
 
   // 有分隔符, 分割
-  if (/-|_/.test(text)) {
-    return text.split(/-|_/).join(' ');
+  if (/-|_/.test(word)) {
+    return word.split(/-|_/).join(' ');
   }
 
   // 转换为小写空格分割
-  return humps.decamelize(text, { separator: ' ' });
+  return humps.decamelize(word, { separator: ' ' });
 }
 
 function search(text) {
