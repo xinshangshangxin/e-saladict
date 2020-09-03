@@ -53,14 +53,6 @@ git clone https://github.com/xinshangshangxin/e-saladict.git
 npm install
 npm run rebuild
 
-# clone 沙拉词典源码
-git clone https://github.com/crimx/ext-saladict.git
-# 构建沙拉词典
-cd ext-saladict
-npm install
-npm run build
-cd ..
-
 # clone WebextensionsEmulator 源码
 git clone https://github.com/crimx/webextensions-emulator.git
 # 替换 WebextensionsEmulator 以适配 ext-saladict
@@ -71,6 +63,14 @@ npm install
 npm run build
 cd ..
 
+# clone 沙拉词典源码
+git clone https://github.com/crimx/ext-saladict.git
+# 构建沙拉词典
+cd ext-saladict
+# 原作者是用 yarn, 这边不能使用 npm install
+yarn
+npm run build
+cd ..
 
 # 组合 saladict 和 WebextensionsEmulator
 rm -rf ext-saladict/build/chrome/mock
