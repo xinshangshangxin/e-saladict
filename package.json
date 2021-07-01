@@ -5,7 +5,8 @@
   "main": "./main/index.js",
   "scripts": {
     "start": "electron .",
-    "rebuild": "npm rebuild --runtime=electron --target=$(electron -v) --disturl=https://atom.io/download/atom-shell --abi=$(electron -a)",
+    "rebuild": "electron-rebuild -f -w robotjs",
+    "rebuild-old": "npm rebuild --runtime=electron --target=$(npx electron -v) --disturl=https://atom.io/download/atom-shell --abi=$(npx electron -a)",
     "build": "npm run build:ext && npm run build:main",
     "build:ext": "cd ext-saladict && npm run build && cd ..",
     "build:main": "node pre-build/index.js WebextensionsEmulator && cd webextensions-emulator && npm run build && rm -rf ../ext-saladict/build/chrome/mock && mkdir -p ../ext-saladict/build/chrome/mock && cp dist/** ../ext-saladict/build/chrome/mock && node ../pre-build/index.js",
@@ -35,8 +36,9 @@
     "rxjs": "^6.6.0"
   },
   "devDependencies": {
-    "electron": "^8.4.0",
+    "electron": "^8.5.5",
     "electron-builder": "^22.7.0",
+    "electron-rebuild": "^2.3.5",
     "fs-extra": "^9.0.1"
   },
   "build": {

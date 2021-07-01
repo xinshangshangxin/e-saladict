@@ -20,12 +20,14 @@ function showWindow() {
     register(win);
   } else if (win.isMinimized()) {
     win.restore();
-  } else {
+  } else if (!win.isVisible()) {
     win.show();
   }
 
-  if (!app.dock.isVisible()) {
-    app.dock.show();
+  if (app.dock) {
+    if (!app.dock.isVisible()) {
+      app.dock.show();
+    }
   }
 
   win.focus();

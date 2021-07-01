@@ -30,7 +30,9 @@ app.on('before-quit', blockQuit);
 app.on('window-all-closed', () => {
   instance.win = null;
 
-  app.dock.hide();
+  if (app.dock) {
+    app.dock.hide();
+  }
 
   if (process.platform !== 'darwin') {
     app.quit();

@@ -1,31 +1,48 @@
-const { clipboard } = require('electron');
-const robot = require('robotjs');
-const BB = require('bluebird');
+const { clipboard } = require("electron");
+const robot = require("robotjs");
+
+const getCopyText = () => {
+  if (process.platform !== "darwin") {
+    robot.keyTap("c", ["control"]);
+  } else {
+    robot.keyTap("c", ["command"]);
+  }
+
+  return clipboard.readText();
+};
 
 const getSelectionText = (() => {
   let lastVal = clipboard.readText();
 
   return async () => {
-    robot.keyTap('c', ['command']);
-    let text = clipboard.readText();
-    console.debug('first copy: ', text);
+    let status = "init";
+    const arr = [50, 100, 500, 900, 1000];
 
-    if (text == lastVal) {
-      await BB.delay(500);
-      text = clipboard.readText();
+    return new Promise((resolve, reject) => {
+      arr.forEach((delay, i) => {
+        setTimeout(() => {
+          if (status === "loading" || status === "success") {
+            return;
+          }
 
-      console.debug('second copy: ', text);
+          status = "loading";
 
-      if (text == lastVal) {
-        await BB.delay(500);
-        text = clipboard.readText();
+          if (i === arr.length - 1) {
+            resolve(lastVal);
+            return;
+          }
 
-        console.debug('third copy: ', text);
-      }
-    }
-
-    lastVal = text;
-    return text;
+          const txt = getCopyText();
+          if (lastVal !== txt) {
+            resolve(txt);
+            status = "success";
+            lastVal = txt;
+          } else {
+            status = "failed";
+          }
+        }, delay);
+      });
+    });
   };
 })();
 

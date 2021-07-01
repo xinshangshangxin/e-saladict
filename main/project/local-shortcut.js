@@ -17,7 +17,9 @@ function register(win) {
 
     setTimeout(() => {
       win.hide();
-      app.dock.hide();
+      if (app.dock) {
+        app.dock.hide();
+      }
     }, 0);
   });
 }
